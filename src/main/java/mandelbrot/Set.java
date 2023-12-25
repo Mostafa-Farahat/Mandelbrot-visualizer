@@ -9,5 +9,5 @@ package mandelbrot;
 
 public interface Set {
     //return number of iterations for escape
-    int isInSet(Complex c, int escapeCount);
+    int isInSet(Complex c);
 }
