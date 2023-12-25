@@ -15,8 +15,8 @@ public class BrotSet implements Set{
         Complex z = new Complex(0,0);
 
         while(iteration != escapeCount){
-            iteration++;
             z = z.multiply(z).add(c);
+            iteration++;
             if(z.getAbsSquared() > 4){
                 return iteration; //white
             }
@@ -24,5 +24,9 @@ public class BrotSet implements Set{
         //if it is part of the set
         //return 0 to paint it black
         return 0;
+    }
+
+    public int getEscapeCount(){
+        return escapeCount;
     }
 }
