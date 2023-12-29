@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 
 public class GrapherCanvas extends Canvas {
-    final double WIDTH;
-    final double HEIGHT;
-    int numberOfColorBrackets;
-    Set set;
-    GraphicsContext gc = this.getGraphicsContext2D();
+    private final double WIDTH=1000;
+    private final double HEIGHT=900;
+    private int numberOfColorBrackets;
+    private Set set;
+    private static GrapherCanvas canvasInstance;
     private class Pixel{
         int x;
         int y;
@@ -19,16 +19,24 @@ public class GrapherCanvas extends Canvas {
             this.y = y;
         }
     }
-
     ArrayList<ArrayList<Pixel>> colorBrackets = new ArrayList<ArrayList<Pixel>>();
-    public GrapherCanvas(Set set, double width, double height){
-        super(width,height);
-        WIDTH = width;
-        HEIGHT = height;
+
+    private GrapherCanvas(){
+        super(1000,900);//horrible move
+    }
+    public static GrapherCanvas getInstance(){
+        if(canvasInstance == null){
+            canvasInstance = new GrapherCanvas();
+        }
+        return canvasInstance;
+    }
+
+    //must be used to specify a set for the canvas to draw
+    public void setSet(Set set){
         this.set = set;
         numberOfColorBrackets = set.getEscapeCount();
 
-        for(int i=0; i<=numberOfColorBrackets; i++){
+        for(int i=0; i<=numberOfColorBrackets;i++){
             colorBrackets.add(new ArrayList<Pixel>());
         }
     }
@@ -37,8 +45,13 @@ public class GrapherCanvas extends Canvas {
     takes ranges desired for render, the value of escape (to modify accuracy)
     and the graphicsContext for the canvas*/
     public void renderSet(double xMin,  double xMax, double yMin, double yMax){
-        double stepSize = Math.max((xMax-xMin) / WIDTH,(yMax-yMin) / HEIGHT );
+        if(set == null){
+            throw new NullPointerException("you must specify the set for the canvas using setSet() method");
+        }
 
+        GraphicsContext gc = getGraphicsContext2D();
+
+        double stepSize = Math.max((xMax-xMin) / WIDTH,(yMax-yMin) / HEIGHT );
         /*these are the actual values that are
         used for computations
         they are the numerical value assigned to each pixel
@@ -60,11 +73,13 @@ public class GrapherCanvas extends Canvas {
         }
 
         for(int i=0; i<=numberOfColorBrackets;i++){
-            if (i == 0) {
-                gc.setFill(Color.rgb(0,0,0));
-            }else{
-                gc.setFill(Color.rgb(255,255,255));
-            }
+            int color = i % 255;
+            gc.setFill(Color.rgb(color,color,color));
+//            if (i == 0) {
+//                gc.setFill(Color.rgb(0,0,0));
+//            }else{
+//                gc.setFill(Color.rgb(255,255,255));
+//            }
             for(Pixel pixel : colorBrackets.get(i)){
                 gc.fillRect(pixel.x,pixel.y,1,1);
             }
