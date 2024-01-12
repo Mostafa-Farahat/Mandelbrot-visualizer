@@ -10,7 +10,7 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Set brotSet = new BrotSet(1500);
+        Set brotSet = new BrotSet(200);
         GrapherCanvas canvas = GrapherCanvas.getInstance();
         canvas.setSet(brotSet);
 
@@ -22,7 +22,7 @@ public class Application extends javafx.application.Application {
         primaryStage.setTitle("Mandelbrot Visualizer");
 
         long start = System.currentTimeMillis();
-        canvas.renderSet(-0.76,-0.74,-0.11,-0.09);
+        canvas.renderSet(-2,1,-1.1,1);
 
         primaryStage.show();
         double finish = System.currentTimeMillis();

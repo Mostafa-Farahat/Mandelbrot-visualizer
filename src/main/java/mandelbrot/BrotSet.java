@@ -18,7 +18,7 @@ public class BrotSet implements Set{
             z = z.multiply(z).add(c);
             iteration++;
             if(z.getAbsSquared() > 4){
-                return iteration; //white
+                return iteration;
             }
         }
         //if it is part of the set

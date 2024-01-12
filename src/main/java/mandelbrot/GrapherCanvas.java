@@ -73,13 +73,12 @@ public class GrapherCanvas extends Canvas {
         }
 
         for(int i=0; i<=numberOfColorBrackets;i++){
-            int color = i % 255;
-            gc.setFill(Color.rgb(color,color,color));
-//            if (i == 0) {
-//                gc.setFill(Color.rgb(0,0,0));
-//            }else{
-//                gc.setFill(Color.rgb(255,255,255));
-//            }
+            double h = (330.0/numberOfColorBrackets)*i;
+            if(i==0){
+                gc.setFill(Color.hsb(h,1,0)); //black as brightness is 0
+            }else{
+                gc.setFill(Color.hsb(h,1,1));
+            }
             for(Pixel pixel : colorBrackets.get(i)){
                 gc.fillRect(pixel.x,pixel.y,1,1);
             }
