@@ -130,7 +130,7 @@ public class GrapherCanvas extends Canvas {
             }
         }
         double finish = System.currentTimeMillis();
-        System.out.println("render took: " + (finish - start) + "seconds");
+        System.out.println("render time: " + (finish - start)/1000 + " seconds");
     }
 
 
