@@ -1,8 +1,14 @@
 package mandelbrot;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.EventListener;
 
 
 public class GrapherCanvas extends Canvas {
@@ -26,6 +32,24 @@ public class GrapherCanvas extends Canvas {
 
     private GrapherCanvas(){
         super(1000,900);//horrible move
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                topLeftX += mouseEvent.getX()/zoomFactor;
+                topLeftY += mouseEvent.getY()/zoomFactor;
+
+                if(mouseEvent.getButton() == MouseButton.PRIMARY){
+                    zoomFactor *= 2;
+                }else if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                    zoomFactor /=2;
+                }
+
+                topLeftX -= (WIDTH/2)/zoomFactor;
+                topLeftY -=(HEIGHT/2)/zoomFactor;
+
+                renderSet(topLeftX,topLeftY);
+            }
+        });
     }
     public static GrapherCanvas getInstance(){
         if(canvasInstance == null){
@@ -46,6 +70,8 @@ public class GrapherCanvas extends Canvas {
 
     // renders the image after scaling according to the zoom factor
     public void renderSet(double xInit, double yInit){
+
+        long start = System.currentTimeMillis();
         topLeftX = xInit;
         topLeftY = yInit;
         if(set == null){
@@ -53,6 +79,10 @@ public class GrapherCanvas extends Canvas {
         }
 
         GraphicsContext gc = getGraphicsContext2D();
+
+        for(ArrayList<Pixel> bracket : colorBrackets){
+            bracket.clear();
+        }
 
         for(int x=0; x<=WIDTH; x++){
             for(int y=0; y<=HEIGHT; y++){
@@ -74,5 +104,10 @@ public class GrapherCanvas extends Canvas {
                 gc.fillRect(pixel.x,pixel.y,1,1);
             }
         }
+        double finish = System.currentTimeMillis();
+        System.out.println(finish - start);
     }
+
+
 }
+
