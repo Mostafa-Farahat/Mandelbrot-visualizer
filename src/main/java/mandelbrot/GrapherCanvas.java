@@ -8,6 +8,9 @@ import java.util.ArrayList;
 public class GrapherCanvas extends Canvas {
     private final double WIDTH=1000;
     private final double HEIGHT=900;
+    private double topLeftX;
+    private double topLeftY;
+    private double zoomFactor = 350;
     private int numberOfColorBrackets;
     private Set set;
     private static GrapherCanvas canvasInstance;
@@ -41,35 +44,23 @@ public class GrapherCanvas extends Canvas {
         }
     }
 
-    /*renders the set
-    takes ranges desired for render, the value of escape (to modify accuracy)
-    and the graphicsContext for the canvas*/
-    public void renderSet(double xMin,  double xMax, double yMin, double yMax){
+    // renders the image after scaling according to the zoom factor
+    public void renderSet(double xInit, double yInit){
+        topLeftX = xInit;
+        topLeftY = yInit;
         if(set == null){
             throw new NullPointerException("you must specify the set for the canvas using setSet() method");
         }
 
         GraphicsContext gc = getGraphicsContext2D();
 
-        double stepSize = Math.max((xMax-xMin) / WIDTH,(yMax-yMin) / HEIGHT );
-        /*these are the actual values that are
-        used for computations
-        they are the numerical value assigned to each pixel
-        (the numerical value of each pixel after scaling)*/
-        double xPoint =xMin;
-        double yPoint = yMin;
-
         for(int x=0; x<=WIDTH; x++){
             for(int y=0; y<=HEIGHT; y++){
 
-                Complex c = new Complex(xPoint, yPoint);
+                Complex c = new Complex(topLeftX + x/zoomFactor, topLeftY + y/zoomFactor);
                 int colorNumber = set.isInSet(c);
                 colorBrackets.get(colorNumber).add(new Pixel(x,y));
-
-                yPoint = yPoint + stepSize;
             }
-            xPoint = xPoint + stepSize;
-            yPoint = yMin;
         }
 
         for(int i=0; i<=numberOfColorBrackets;i++){

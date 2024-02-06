@@ -22,7 +22,7 @@ public class Application extends javafx.application.Application {
         primaryStage.setTitle("Mandelbrot Visualizer");
 
         long start = System.currentTimeMillis();
-        canvas.renderSet(-2,1,-1.1,1);
+        canvas.renderSet(-2,-1.5);
 
         primaryStage.show();
         double finish = System.currentTimeMillis();
