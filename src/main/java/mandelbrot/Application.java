@@ -1,7 +1,6 @@
 package mandelbrot;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Application extends javafx.application.Application {
@@ -21,12 +20,9 @@ public class Application extends javafx.application.Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Mandelbrot Visualizer");
 
-        long start = System.currentTimeMillis();
         canvas.renderSet(-2,-1.5);
 
         primaryStage.show();
-        double finish = System.currentTimeMillis();
-        System.out.println(finish - start);
     }
 
 

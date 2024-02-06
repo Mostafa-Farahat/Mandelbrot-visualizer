@@ -2,6 +2,8 @@ package mandelbrot;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -32,6 +34,8 @@ public class GrapherCanvas extends Canvas {
 
     private GrapherCanvas(){
         super(1000,900);//horrible move
+        setFocusTraversable(true);
+//      to handle zooming (right click zooms in and left click zooms out)
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -48,6 +52,27 @@ public class GrapherCanvas extends Canvas {
                 topLeftY -=(HEIGHT/2)/zoomFactor;
 
                 renderSet(topLeftX,topLeftY);
+            }
+        });
+//        to handle panning around using the arrow keys
+        this.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                KeyCode key = keyEvent.getCode();
+                switch(key){
+                    case UP:
+                        renderSet(topLeftX, topLeftY - (HEIGHT/zoomFactor)/4);
+                        break;
+                    case DOWN:
+                        renderSet(topLeftX, topLeftY + (HEIGHT/zoomFactor)/4);
+                        break;
+                    case RIGHT:
+                        renderSet(topLeftX + (WIDTH/zoomFactor)/4, topLeftY);
+                        break;
+                    case LEFT:
+                        renderSet(topLeftX - (WIDTH/zoomFactor)/4, topLeftY);
+                        break;
+                }
             }
         });
     }
@@ -105,7 +130,7 @@ public class GrapherCanvas extends Canvas {
             }
         }
         double finish = System.currentTimeMillis();
-        System.out.println(finish - start);
+        System.out.println("render took: " + (finish - start) + "seconds");
     }
 
 
